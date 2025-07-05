@@ -6,8 +6,12 @@ phases:
       nodejs: 18
     commands:
       - echo Installing dependencies...
-      - npm install axios
+      - npm install
   build:
     commands:
-      - echo Running user API tests...
-      - node test/user-api.test.js
+      - echo Running tests...
+      - npm test
+
+artifacts:
+  files:
+    - '**/*'
