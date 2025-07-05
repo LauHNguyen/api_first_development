@@ -9,10 +9,6 @@ phases:
       - npm install
   pre_build:
     commands:
-      - echo "Exporting environment..."
-      - export LAMBDA_URI=$LAMBDA_URI
-      - chmod +x generate-api.sh
-      - ./generate-api.sh
       - echo "🔧 Building secure api.yaml..."
       - node build-openapi.js
       - echo "📄 Generating API documentation..."
