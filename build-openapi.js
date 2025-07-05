@@ -11,6 +11,7 @@ let content = fs.readFileSync(templatePath, 'utf8');
 
 Object.keys(process.env).forEach((key) => {
   const value = process.env[key];
+  
   content = content.replace(new RegExp(`\\$\\{${key}\\}`, 'g'), value);
 });
 
