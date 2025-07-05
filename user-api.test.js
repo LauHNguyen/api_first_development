@@ -1,5 +1,5 @@
 const axios = require('axios');
-const baseUrl = 'https://your-api-id.execute-api.us-east-1.amazonaws.com/prod'; // Thay đúng API URL
+const baseUrl = 'https://oov7brvbpl.execute-api.us-east-1.amazonaws.com/dev'; // Thay đúng API URL từ AWS API Gateway
 
 (async () => {
   try {
