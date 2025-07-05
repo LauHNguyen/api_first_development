@@ -18,5 +18,6 @@ Thumbs.db
 # Bỏ cache hoặc folder bạn sẽ build lại
 generated-client/
 generated-server/
+api.yaml
 
 .env

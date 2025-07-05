@@ -1,5 +1,7 @@
+require('dotenv').config();
 const axios = require('axios');
-const baseUrl = 'https://oov7brvbpl.execute-api.us-east-1.amazonaws.com/dev'; // Thay đúng API URL từ AWS API Gateway
+
+const baseUrl = process.env.API_GATEWAY_URL;// Thay đúng API URL từ AWS API Gateway
 
 (async () => {
   try {

@@ -7,6 +7,12 @@ phases:
     commands:
       - echo Installing dependencies...
       - npm install
+  pre_build:
+    commands:
+      - echo "Exporting environment..."
+      - export LAMBDA_URI=$LAMBDA_URI
+      - chmod +x generate-api.sh
+      - ./generate-api.sh
   build:
     commands:
       - echo Running tests...
