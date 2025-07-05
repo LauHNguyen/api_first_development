@@ -1,4 +1,4 @@
-nameopenapi: 3.0.3
+openapi: 3.0.3
 info:
   title: User Management API
   version: 1.0.0

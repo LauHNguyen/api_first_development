@@ -13,6 +13,10 @@ phases:
       - export LAMBDA_URI=$LAMBDA_URI
       - chmod +x generate-api.sh
       - ./generate-api.sh
+      - echo "🔧 Building secure api.yaml..."
+      - node build-openapi.js
+      - echo "📄 Generating API documentation..."
+      - npx redoc-cli bundle api.yaml -o docs/api-doc.html
   build:
     commands:
       - echo Running tests...
