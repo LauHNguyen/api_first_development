@@ -16,4 +16,4 @@ Object.keys(process.env).forEach((key) => {
 });
 
 fs.writeFileSync(outputPath, content);
-console.log(`✅ Generated ${outputPath} from template`);
+console.log(`Generated ${outputPath} from template`);
