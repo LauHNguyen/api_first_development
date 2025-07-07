@@ -1,10 +1,15 @@
 {
   "scripts": {
-    "test": "node user-api.test.js"
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "coverage": "jest --coverage"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.21.0",
-    "redoc-cli": "^0.13.21"
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.4",
+    "redoc-cli": "^0.13.21",
+    "ts-jest": "^29.4.0"
   },
   "dependencies": {
     "dotenv": "^17.0.1"

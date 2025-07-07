@@ -7,16 +7,23 @@ phases:
     commands:
       - echo Installing dependencies...
       - npm install
+
   pre_build:
     commands:
-      - echo "🔧 Building secure api.yaml..."
+      - echo Building secure api.yaml...
       - node build-openapi.js
-      - echo "📄 Generating API documentation..."
+      - echo Generating API documentation...
       - npx redoc-cli bundle api.yaml -o docs/api-doc.html
+      - echo Running lint check...
+      - npm run lint
+      - echo Running security audit...
+      - npm audit --audit-level=high
+
   build:
     commands:
       - echo Running tests...
       - npm test
+      - npm run coverage
 
 artifacts:
   files:
