@@ -23,4 +23,5 @@ phases:
 
 artifacts:
   files:
-    - '**/*'
+    - lambda/**      # chỉ đưa thư mục lambda vào artifact
+  discard-paths: no
