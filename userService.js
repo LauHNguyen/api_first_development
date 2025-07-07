@@ -9,29 +9,29 @@ const TABLE_NAME = 'Users';
 
 exports.handler = async (event) => {
     const { httpMethod, pathParameters, body } = event;
-    const path = event.resource;
+    const path = event.path;
     
     try {
         switch (httpMethod) {
             case 'GET':
-                if (path === '/users') {
+                if (path.endsWith('/users')) {
                     return await getAllUsers();
-                } else if (path === '/users/{userID}') {
+                } else if (path.match(/\/users\/[^/]+$/)) {
                     return await getUserById(pathParameters.userID);
                 }
                 break;
             case 'POST':
-                if (path === '/users') {
+                if (path.endsWith('/users')) {
                     return await createUser(JSON.parse(body));
                 }
                 break;
             case 'PUT':
-                if (path === '/users/{userID}') {
+                if (path.match(/\/users\/[^/]+$/)) {
                     return await updateUser(pathParameters.userID, JSON.parse(body));
                 }
                 break;
             case 'DELETE':
-                if (path === '/users/{userID}') {
+                if (path.match(/\/users\/[^/]+$/)) {
                     return await deleteUser(pathParameters.userID);
                 }
                 break;
