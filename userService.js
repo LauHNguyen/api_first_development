@@ -1,5 +1,12 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, ScanCommand, GetCommand, PutCommand, UpdateCommand, DeleteCommand } = require('@aws-sdk/lib-dynamodb');
+const {
+    DynamoDBDocumentClient,
+    ScanCommand,
+    GetCommand,
+    PutCommand,
+    UpdateCommand,
+    DeleteCommand
+} = require('@aws-sdk/lib-dynamodb');
 const { randomUUID } = require('crypto');
 
 const client = new DynamoDBClient({});
@@ -8,46 +15,60 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 const TABLE_NAME = 'Users';
 
 exports.handler = async (event) => {
-    const { httpMethod, pathParameters, body } = event;
-    const path = event.path;
-    
+    console.log("Event Received:", {
+        resource: event.resource,
+        path: event.path,
+        pathParameters: event.pathParameters,
+    });
+    const { httpMethod, pathParameters, body, resource } = event;
+
     try {
         switch (httpMethod) {
             case 'GET':
-                if (path.endsWith('/users')) {
+                if (resource === '/v1/users') {
                     return await getAllUsers();
-                } else if (path.match(/\/users\/[^/]+$/)) {
+                } else if (resource === '/v1/users/{userID}' && pathParameters?.userID) {
                     return await getUserById(pathParameters.userID);
                 }
                 break;
+
             case 'POST':
-                if (path.endsWith('/users')) {
+                if (resource === '/v1/users') {
                     return await createUser(JSON.parse(body));
                 }
                 break;
+
             case 'PUT':
-                if (path.match(/\/users\/[^/]+$/)) {
+                if (resource === '/v1/users/{userID}' && pathParameters?.userID) {
                     return await updateUser(pathParameters.userID, JSON.parse(body));
                 }
                 break;
+
             case 'DELETE':
-                if (path.match(/\/users\/[^/]+$/)) {
+                if (resource === '/v1/users/{userID}' && pathParameters?.userID) {
                     return await deleteUser(pathParameters.userID);
                 }
                 break;
         }
-        
+
         return {
             statusCode: 404,
             body: JSON.stringify({ message: 'Not Found' })
         };
     } catch (error) {
+        console.error("Lambda Error:", {
+            message: error.message,
+            stack: error.stack
+        });
+
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: error.message })
+            body: JSON.stringify({ message: error.message || 'Internal server error' })
         };
     }
 };
+
+// ========== DynamoDB Functions ==========
 
 async function getAllUsers() {
     const result = await dynamodb.send(new ScanCommand({ TableName: TABLE_NAME }));
@@ -62,14 +83,14 @@ async function getUserById(userID) {
         TableName: TABLE_NAME,
         Key: { userID }
     }));
-    
+
     if (!result.Item) {
         return {
             statusCode: 404,
             body: JSON.stringify({ message: 'User not found' })
         };
     }
-    
+
     return {
         statusCode: 200,
         body: JSON.stringify(result.Item)
@@ -79,12 +100,12 @@ async function getUserById(userID) {
 async function createUser(userData) {
     const userID = randomUUID();
     const user = { userID, ...userData };
-    
+
     await dynamodb.send(new PutCommand({
         TableName: TABLE_NAME,
         Item: user
     }));
-    
+
     return {
         statusCode: 201,
         body: JSON.stringify(user)
@@ -105,7 +126,7 @@ async function updateUser(userID, userData) {
     try {
         const result = await dynamodb.send(new UpdateCommand({
             TableName: TABLE_NAME,
-            Key: { userID: String(userID) },
+            Key: { userID },
             UpdateExpression: `SET ${updateExpression.join(', ')}`,
             ExpressionAttributeValues: expressionAttributeValues,
             ExpressionAttributeNames: expressionAttributeNames,
@@ -118,7 +139,6 @@ async function updateUser(userID, userData) {
             body: JSON.stringify(result.Attributes)
         };
     } catch (error) {
-        console.error("Update error", error);
         if (error.name === 'ConditionalCheckFailedException') {
             return {
                 statusCode: 404,
@@ -129,13 +149,12 @@ async function updateUser(userID, userData) {
     }
 }
 
-
 async function deleteUser(userID) {
     await dynamodb.send(new DeleteCommand({
         TableName: TABLE_NAME,
         Key: { userID }
     }));
-    
+
     return {
         statusCode: 204,
         body: ''
