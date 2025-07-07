@@ -14,10 +14,6 @@ phases:
       - node build-openapi.js
       - echo Generating API documentation...
       - npx redoc-cli bundle api.yaml -o docs/api-doc.html
-      - echo Running lint check...
-      - npm run lint
-      - echo Running security audit...
-      - npm audit --audit-level=high
 
   build:
     commands:

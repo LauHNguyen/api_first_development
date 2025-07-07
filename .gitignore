@@ -1,21 +1,21 @@
-# Ignore Node.js modules
+
 node_modules/
 
-# Logs
+
 *.log
 
-# Ignore local VSCode settings (optional)
+
 .vscode/
 
-# Ignore test output files (nếu có)
+
 *.test-results.*
 coverage/
 
-# Ignore temp files or OS junk
+
 .DS_Store
 Thumbs.db
 
-# Bỏ cache hoặc folder bạn sẽ build lại
+
 generated-client/
 generated-server/
 api.yaml
