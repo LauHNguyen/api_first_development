@@ -5,7 +5,7 @@ info:
   description: API for managing users with CRUD operations
 
 paths:
-  /users:
+  /v1/users:
     get:
       summary: Get all users
       x-amazon-apigateway-integration:
@@ -41,7 +41,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
-  /users/{userID}:
+  /v1/users/{userID}:
     get:
       summary: Get user by ID
       x-amazon-apigateway-integration:
